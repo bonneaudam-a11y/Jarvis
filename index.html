@@ -44,30 +44,11 @@
   @keyframes pageIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
 
   /* PAGE SECRÈTE — buste de synthèse en plein écran */
-  .secret-page{
-    display:none;
-    position:fixed; inset:0; z-index:200;
-    background:radial-gradient(ellipse at 50% 30%, #0A1420, #01030A 75%);
-    flex-direction:column; align-items:center; justify-content:center;
-  }
-  .secret-page.open{display:flex;}
-  .secret-close{
-    position:absolute; top:20px; right:20px;
-    width:38px; height:38px; border-radius:50%;
-    background:rgba(255,255,255,0.06); border:1px solid var(--line);
-    color:var(--text); font-size:16px; cursor:pointer; z-index:2;
-  }
-  .secret-label{
-    position:absolute; top:22px; left:22px;
-    font-family:'Share Tech Mono'; font-size:11px; letter-spacing:3px;
-    color:#FFD79A; text-shadow:0 0 12px rgba(255,200,120,0.6);
-  }
-  #humanCanvas{width:100%; height:78vh; max-height:720px;}
-
+  /* Badge d'état (VEILLE / ÉCOUTE / RÉFLEXION / RÉPONSE) sur la page d'accueil */
+  .state-badge-row{ display:flex; justify-content:center; margin:6px 0 2px; }
   .secret-state{
-    position:absolute; top:52px; left:22px;
     font-family:'Share Tech Mono'; font-size:10px; letter-spacing:2px;
-    padding:4px 9px; border-radius:2px;
+    padding:4px 10px; border-radius:2px;
     border:1px solid rgba(58,217,255,0.5); color:#8FD8FF;
     background:rgba(58,217,255,0.07);
     transition:color .3s, border-color .3s, background .3s, box-shadow .3s;
@@ -76,45 +57,23 @@
   .secret-state.analyzing{ color:#FF8A5B; border-color:rgba(255,110,60,0.7); background:rgba(255,110,60,0.10); box-shadow:0 0 18px rgba(255,110,60,0.35); }
   .secret-state.responding{ color:#9BF7C8; border-color:rgba(140,247,200,0.6); background:rgba(140,247,200,0.08); box-shadow:0 0 16px rgba(140,247,200,0.25); }
 
-  .secret-controls{
-    position:absolute; left:0; right:0; bottom:78px;
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    z-index:3;
-  }
-  .secret-btn{
-    background:rgba(58,217,255,0.10);
-    border:1px solid rgba(58,217,255,0.55);
-    color:#9FE4FF;
-    font-family:'Share Tech Mono'; font-size:12px; letter-spacing:1px;
-    padding:11px 22px; border-radius:3px; cursor:pointer;
-    transition:background .2s, border-color .2s, color .2s, box-shadow .2s;
-  }
-  .secret-btn:active{ background:rgba(58,217,255,0.2); }
-  .secret-btn.ghost{ background:transparent; border-color:rgba(58,217,255,0.25); color:#6FA8C8; font-size:11px; padding:8px 18px; }
-  .secret-btn.listening{
-    background:rgba(255,93,93,0.12); border-color:#FF5D5D; color:#FF9C9C;
-    box-shadow:0 0 16px rgba(255,93,93,0.3);
-  }
-  .secret-btn.on{ border-color:#8CF7C8; color:#8CF7C8; box-shadow:0 0 14px rgba(140,247,200,0.25); }
-
-  .secret-console{
-    position:absolute; right:8px; top:auto; bottom:26%; transform:none;
-    width:min(38vw, 195px); max-height:34vh;
-    background:rgba(6,16,26,0.42);
+  /* Console de session, intégrée à la page d'accueil */
+  .home-console{
+    margin-top:14px; width:100%;
+    background:rgba(6,16,26,0.45);
     border:1px solid rgba(58,217,255,0.22);
     border-radius:3px;
-    padding:7px 8px 8px;
-    backdrop-filter:blur(2px);
-    display:flex; flex-direction:column; gap:5px;
-    box-shadow:0 0 22px rgba(58,217,255,0.08) inset;
+    padding:8px 10px 10px;
+    display:flex; flex-direction:column; gap:6px;
+    max-height:200px;
   }
-  .secret-console .sc-head{
+  .home-console .sc-head{
     font-family:'Share Tech Mono'; font-size:9px; letter-spacing:1.6px;
     color:#5FBEE8; border-bottom:1px solid rgba(58,217,255,0.2); padding-bottom:5px;
   }
-  .secret-console .sc-body{
+  .home-console .sc-body{
     overflow-y:auto; display:flex; flex-direction:column; gap:7px;
-    font-family:'Share Tech Mono'; font-size:10px; line-height:1.45;
+    font-family:'Share Tech Mono'; font-size:10.5px; line-height:1.45;
   }
   .sc-line{ opacity:0; animation:scIn .35s ease-out forwards; }
   @keyframes scIn{ from{opacity:0; transform:translateX(8px);} to{opacity:1; transform:none;} }
@@ -124,11 +83,6 @@
   .sc-line.sys .sc-who{ color:#5C7A92; }
   .sc-line .sc-txt{ color:#B9DEF2; }
   .sc-line.sys .sc-txt{ color:#6E8CA3; }
-  .secret-caption{
-    position:absolute; left:0; right:0; bottom:18px; text-align:center;
-    font-family:'Share Tech Mono'; font-size:10px; letter-spacing:4px;
-    color:var(--muted);
-  }
 
   .tabbar{
     position:fixed; bottom:0; left:0; right:0;
@@ -327,9 +281,8 @@
   }
   @keyframes spinCW{to{transform:rotate(360deg);}}
   @keyframes spinCCW{to{transform:rotate(-360deg);}}
-  #particleSphere{
+  #humanCanvas{
     position:absolute; inset:0; width:100%; height:100%;
-    filter: drop-shadow(0 0 26px rgba(58,217,255,0.45)) drop-shadow(0 0 55px rgba(58,217,255,0.25));
   }
   .core-readout{
     position:absolute; font-family:'Share Tech Mono'; font-size:10px; color:var(--cyan); opacity:0.75;
@@ -540,7 +493,7 @@
 <div class="shell">
 
   <header>
-    <div class="title">J.A.R.V.I.S<span>ASSISTANT PERSONNEL — SYSTÈME ACTIF · BUILD v26</span></div>
+    <div class="title">J.A.R.V.I.S<span>ASSISTANT PERSONNEL — SYSTÈME ACTIF · BUILD v27</span></div>
     <div class="head-right">
       <div class="mic-live"><span class="rec-dot"></span> MICRO EN ÉCOUTE</div>
       <div class="clock">09 AOÛT 2026 — 10:42:07</div>
@@ -568,11 +521,12 @@
         <div class="arc a4"></div>
         <span class="core-readout top-left">MEM 68%</span>
         <span class="core-readout top-right">CPU 41%</span>
-        <canvas id="particleSphere" width="300" height="300"></canvas>
+        <canvas id="humanCanvas"></canvas>
         <span class="core-readout bot-left">LAT 112ms</span>
         <span class="core-readout bot-right" id="ttsState">TTS RDY</span>
       </div>
       <div class="status-line" id="statusLine">EN VEILLE</div>
+      <div class="state-badge-row"><span class="secret-state" id="secretState">VEILLE</span></div>
       <div class="waveform" id="wf"></div>
       <div id="micLevelReadout" class="mic-level-readout">🎤 Niveau micro : — (touchez « Lancer une commande »)</div>
 
@@ -587,6 +541,11 @@
       <div class="transcript" id="transcript">
         <span class="tag">VOUS —</span> "Jarvis, montre-moi les ventes de la semaine."<br>
         <span class="tag">JARVIS —</span> "Sur les sept derniers jours, 2 459 nouveaux utilisateurs. Affichage du tableau."
+      </div>
+
+      <div class="home-console" id="secretConsole">
+        <div class="sc-head">◈ FLUX DE SESSION</div>
+        <div class="sc-body" id="secretConsoleBody"></div>
       </div>
     </div>
   </div>
@@ -704,21 +663,6 @@
 
 <!-- ============ PAGE SECRÈTE : IDENTITÉ RÉVÉLÉE ============ -->
 <!-- Non listée dans la navigation — accessible uniquement en disant "Jarvis, montre-moi qui tu es" -->
-<div id="secretPage" class="secret-page">
-  <button id="secretCloseBtn" class="secret-close">✕</button>
-  <div class="secret-label" id="secretLabel">IDENTITÉ RÉVÉLÉE</div>
-  <div class="secret-state" id="secretState">VEILLE</div>
-  <canvas id="humanCanvas"></canvas>
-  <div class="secret-controls">
-    <button id="secretTalkBtn" class="secret-btn">🎯 Lancer une commande</button>
-    <button id="secretWakeBtn" class="secret-btn ghost">🎧 Écoute permanente</button>
-  </div>
-  <div class="secret-console" id="secretConsole">
-    <div class="sc-head">◈ FLUX DE SESSION</div>
-    <div class="sc-body" id="secretConsoleBody"></div>
-  </div>
-  <div class="secret-caption">J.A.R.V.I.S — FORME DE SYNTHÈSE</div>
-</div>
 
 <!-- ============ BARRE D'ONGLETS ============ -->
 <nav class="tabbar">
@@ -753,273 +697,6 @@ function spark(id, count){
   }
 }
 spark('sp1',24); spark('sp2',24); spark('sp3',24); spark('sp4',24);
-
-/* ---- TOILE ORGANIQUE VIVANTE (noyau) ---- */
-(function(){
-  const canvas = document.getElementById('particleSphere');
-  const ctx = canvas.getContext('2d');
-  const wrap = canvas.parentElement; // .core-wrap, taille responsive en CSS
-
-  let W = 0, H = 0, cx = 0, cy = 0, DPR = 1;
-  let RADIUS = 92; // recalculé selon la taille réelle affichée
-
-  function resizeCanvas(){
-    const rect = wrap.getBoundingClientRect();
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = Math.max(1, Math.round(rect.width * DPR));
-    H = Math.max(1, Math.round(rect.height * DPR));
-    canvas.width = W;
-    canvas.height = H;
-    cx = W / 2; cy = H / 2;
-    RADIUS = Math.min(W, H) * 0.30;
-  }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-
-  const N = 4000;          // réservoir maximal de nœuds (la densité VISIBLE respire en dessous de ce chiffre)
-  const FOV_BASE = 340;
-
-  function clamp(v, lo, hi){ return v < lo ? lo : (v > hi ? hi : v); }
-
-  // Génère le réservoir de nœuds sur une sphère (distribution uniforme type Fibonacci) —
-  // un préfixe de cette liste, à n'importe quelle longueur, reste bien réparti sur la sphère,
-  // ce qui permet de faire varier le nombre de nœuds VISIBLES sans motif bizarre.
-  const particles = [];
-  const golden = Math.PI * (3 - Math.sqrt(5));
-  for (let i = 0; i < N; i++) {
-    const y = 1 - (i / (N - 1)) * 2;
-    const r = Math.sqrt(Math.max(0, 1 - y * y));
-    const theta = golden * i;
-    const isHub = Math.random() < 0.09; // ~9% de "neurones" plus gros, comme des nœuds de convergence
-    particles.push({
-      bx: Math.cos(theta) * r, by: y, bz: Math.sin(theta) * r,
-      wfx: 0.12 + Math.random() * 0.26,
-      wfy: 0.12 + Math.random() * 0.26,
-      wfz: 0.12 + Math.random() * 0.26,
-      wpx: Math.random() * Math.PI * 2,
-      wpy: Math.random() * Math.PI * 2,
-      wpz: Math.random() * Math.PI * 2,
-      wamp: 0.35 + Math.random() * 0.55,
-      phase: Math.random() * Math.PI * 2,
-      speed: 0.5 + Math.random() * 1.1,
-      jitter: 0.04 + Math.random() * 0.06,
-      flick: Math.random() * Math.PI * 2,
-      // pulsation individuelle de taille — chaque nœud "respire" à son propre rythme,
-      // comme un neurone qui s'active puis se calme, indépendamment des autres
-      sizeBase: isHub ? (0.55 + Math.random() * 0.35) : (0.16 + Math.random() * 0.16),
-      sizePhase: Math.random() * Math.PI * 2,
-      sizeSpeed: 0.35 + Math.random() * 0.9,
-      sizeDepth: isHub ? 0.35 : (0.45 + Math.random() * 0.35), // amplitude de la pulsation
-      isHub,
-      px: 0, py: 0, depth: 0.5
-    });
-  }
-
-  // --- Respiration de la densité : le nombre de nœuds VISIBLES varie dans le temps,
-  // comme un cœur ou un poumon — cycle rapide et net, pour que ce soit visible en quelques secondes.
-  const MIN_VISIBLE = 500, MAX_VISIBLE = 2000;
-  let breathT = 0;
-  function currentVisibleCount(){
-    // deux sinusoïdes de périodes différentes superposées → respiration organique, pas un métronome
-    // cycle principal ≈ 9s, modulation lente ≈ 40s pour éviter un effet trop mécanique/répétitif
-    const wave = 0.5 + 0.5 * (
-      0.7 * Math.sin(breathT * 0.7) +
-      0.3 * Math.sin(breathT * 0.16 + 1.4)
-    ) / 1.0;
-    return Math.round(MIN_VISIBLE + clamp(wave, 0, 1) * (MAX_VISIBLE - MIN_VISIBLE));
-  }
-
-  // --- Liens dynamiques et courbés : la toile se retisse en continu ---
-  // Chaque lien mémorise sa propre courbure (phase + amplitude) pour un tissage organique.
-  let edges = [];
-  function edgeKey(i, j){ return i < j ? i + '_' + j : j + '_' + i; }
-  const edgeSet = new Set();
-
-  function tryAddEdge(visibleCount){
-    if (visibleCount < 2) return;
-    const i = (Math.random() * visibleCount) | 0;
-    // approxime le plus proche voisin via un échantillon aléatoire (pas de O(n²) coûteux)
-    const sampleSize = Math.min(14, visibleCount - 1);
-    let bestJ = -1, bestD = Infinity;
-    for (let s = 0; s < sampleSize; s++) {
-      const j = (Math.random() * visibleCount) | 0;
-      if (j === i) continue;
-      const a = particles[i], b = particles[j];
-      const dx = a.bx - b.bx, dy = a.by - b.by, dz = a.bz - b.bz;
-      const d = dx*dx + dy*dy + dz*dz;
-      if (d < bestD) { bestD = d; bestJ = j; }
-    }
-    // Un lien vers un voisin trop lointain (mauvais tirage aléatoire) donnerait un trait
-    // parasite qui traverse toute la sphère — on l'ignore plutôt que de le forcer.
-    const MAX_EDGE_DIST_SQ = 0.16;
-    if (bestJ === -1 || bestD > MAX_EDGE_DIST_SQ) return;
-    const key = edgeKey(i, bestJ);
-    if (edgeSet.has(key)) return;
-    edgeSet.add(key);
-    edges.push({
-      i, j: bestJ, key,
-      curvePhase: Math.random() * Math.PI * 2,
-      curveSpeed: 0.4 + Math.random() * 0.6,
-      curveAmt: 0.12 + Math.random() * 0.22,
-      life: 0, // en secondes, sert à faire naître le lien en fondu
-      fireUntil: 0 // instant (en t) jusqu'auquel ce lien "décharge" comme un signal nerveux
-    });
-  }
-
-  function pruneAndGrowEdges(visibleCount, dt){
-    // retire les liens dont un nœud est temporairement invisible (densité qui respire)
-    if (edges.length){
-      edges = edges.filter(e => {
-        const ok = e.i < visibleCount && e.j < visibleCount;
-        if (!ok) edgeSet.delete(e.key);
-        return ok;
-      });
-    }
-    // churn doux : quelques liens naissent, quelques-uns meurent, en continu
-    const target = Math.round(visibleCount * 0.75);
-    const churn = 3;
-    for (let k = 0; k < churn && edges.length > target * 0.9; k++) {
-      const idx = (Math.random() * edges.length) | 0;
-      const e = edges[idx];
-      edgeSet.delete(e.key);
-      edges.splice(idx, 1);
-    }
-    for (let k = 0; k < churn + 2 && edges.length < target; k++) {
-      tryAddEdge(visibleCount);
-    }
-    for (let e = 0; e < edges.length; e++) edges[e].life = Math.min(1, edges[e].life + dt * 1.5);
-  }
-
-  let rotY = 0, rotX = 0.15;
-  let t = 0;
-  let lastTs = 0;
-  window.__micLevel = 0; // 0..1, piloté par le micro réel (ou simulé) quand actif
-
-  // Excitation LISSÉE : la voix ne doit plus faire "sursauter" le noyau d'un coup,
-  // mais le faire monter en tension progressivement, puis redescendre en douceur.
-  let smoothMic = 0;
-
-  function frame(ts){
-    try{
-      renderFrame(ts);
-    }catch(err){
-      console.warn('Rendu du noyau : image ignorée après erreur —', err.message);
-    }
-    requestAnimationFrame(frame);
-  }
-
-  function renderFrame(ts){
-    const dt = lastTs ? Math.min(0.05, (ts - lastTs) / 1000) : 0.016;
-    lastTs = ts;
-    t += dt;
-    breathT += dt;
-
-    const rawMic = clamp(window.__micLevel || 0, 0, 1);
-    // montée lente ("volupté"), redescente un peu plus rapide mais toujours douce
-    const rate = rawMic > smoothMic ? 0.020 : 0.045;
-    smoothMic += (rawMic - smoothMic) * rate;
-    const micLevel = smoothMic;
-
-    const visibleCount = currentVisibleCount();
-    pruneAndGrowEdges(visibleCount, dt);
-
-    rotY += 0.0026 + micLevel * 0.009;
-
-    ctx.clearRect(0, 0, W, H);
-
-    const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-    const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-    // l'excitation peut désormais aller bien plus loin (×2 à ×3), mais toujours amenée en douceur
-    const boost = 1 + micLevel * 4.5;
-    const FOV = FOV_BASE * (W / 600 || 1);
-
-    for (let i = 0; i < visibleCount; i++) {
-      const p = particles[i];
-
-      const wx = Math.sin(t * p.wfx + p.wpx);
-      const wy = Math.sin(t * p.wfy + p.wpy) * 1.15;
-      const wz = Math.sin(t * p.wfz + p.wpz);
-
-      const ampMul = 1 + micLevel * 0.9;
-      let vx = p.bx + wx * p.wamp * ampMul;
-      let vy = p.by + wy * p.wamp * ampMul;
-      let vz = p.bz + wz * p.wamp * ampMul;
-
-      const len = Math.sqrt(vx*vx + vy*vy + vz*vz) || 1;
-      vx /= len; vy /= len; vz /= len;
-
-      const n = Math.sin(t * p.speed + p.phase);
-      const rr = RADIUS * (1 + n * p.jitter * boost);
-
-      const x = vx * rr, y = vy * rr, z = vz * rr;
-
-      const x1 = x * cosY - z * sinY;
-      const z1 = x * sinY + z * cosY;
-      const y1 = y * cosX - z1 * sinX;
-      const z2 = y * sinX + z1 * cosX;
-
-      const denom = FOV + z2 + RADIUS;
-      const scale = denom > 1 ? FOV / denom : FOV / 1;
-
-      p.px = cx + x1 * scale;
-      p.py = cy + y1 * scale;
-      p.depth = clamp((z2 + RADIUS) / (RADIUS * 2), 0, 1);
-      p.flicker = 0.55 + 0.45 * Math.sin(t * 1.8 + p.flick);
-    }
-
-    // --- Liens courbés, vivants : chaque lien respire sa propre légère ondulation ---
-    for (let e = 0; e < edges.length; e++) {
-      const edge = edges[e];
-      const a = particles[edge.i], b = particles[edge.j];
-      if (a.depth === undefined) continue;
-      const avgDepth = (a.depth + b.depth) / 2;
-      const bornAlpha = edge.life; // fondu à la naissance du lien
-      const alpha = clamp(0.04 + avgDepth * 0.5, 0, 0.55) * ((a.flicker + b.flicker) / 2) * bornAlpha;
-
-      const mx = (a.px + b.px) / 2, my = (a.py + b.py) / 2;
-      const dx = b.px - a.px, dy = b.py - a.py;
-      const dist = Math.sqrt(dx*dx + dy*dy) || 1;
-      // décalage perpendiculaire qui ondule doucement dans le temps → la toile "vit"
-      const wobble = Math.sin(t * edge.curveSpeed + edge.curvePhase);
-      const offset = dist * edge.curveAmt * wobble;
-      const cxo = mx + (-dy / dist) * offset;
-      const cyo = my + (dx / dist) * offset;
-
-      ctx.beginPath();
-      ctx.moveTo(a.px, a.py);
-      ctx.quadraticCurveTo(cxo, cyo, b.px, b.py);
-      ctx.strokeStyle = `rgba(120, 232, 255, ${clamp(alpha, 0, 1).toFixed(3)})`;
-      ctx.lineWidth = Math.max(0.25, 0.2 + avgDepth * 0.55) * DPR;
-      ctx.stroke();
-    }
-
-    // --- Nœuds (réseau de neurones : petits points, chacun pulse à son propre rythme) ---
-    for (let i = 0; i < visibleCount; i++) {
-      const p = particles[i];
-      const alpha = clamp(0.15 + p.depth * 0.85, 0, 1) * p.flicker;
-      // pulsation individuelle : chaque nœud grossit/rétrécit sur son propre cycle
-      const pulse = 1 + Math.sin(t * p.sizeSpeed + p.sizePhase) * p.sizeDepth;
-      const size = Math.max(0.09, p.sizeBase * pulse * (0.5 + p.depth * 0.7)) * DPR;
-      ctx.beginPath();
-      ctx.arc(p.px, p.py, size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(170, 245, 255, ${alpha.toFixed(3)})`;
-      ctx.fill();
-    }
-
-    // cœur lumineux central — s'intensifie en douceur avec le niveau du micro lissé
-    const coreR = Math.max(1, (RADIUS * 0.30) + micLevel * (RADIUS * 0.30));
-    const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR);
-    core.addColorStop(0, 'rgba(255,255,255,0.9)');
-    core.addColorStop(0.4, 'rgba(120,232,255,0.5)');
-    core.addColorStop(1, 'rgba(120,232,255,0)');
-    ctx.fillStyle = core;
-    ctx.beginPath();
-    ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  requestAnimationFrame(frame);
-})();
 
 /* ---- ÉCOUTE MICRO RÉELLE + MACHINE À ÉTATS ---- */
 (function(){
@@ -1726,12 +1403,11 @@ spark('sp1',24); spark('sp2',24); spark('sp3',24); spark('sp4',24);
       let q, r, actionRan = false;
 
       if (userText){
-        // Phrase secrète — vérifiée en priorité, avant toute action normale
+        // Question sur son identité — Jarvis est désormais visible en permanence
         if (SECRET_PATTERN.test(userText)){
           q = userText;
-          r = "Très bien. Voici qui je suis.";
+          r = "Je suis Jarvis, votre assistant. Vous me voyez tel que je suis.";
           actionRan = true;
-          openSecretPage();
         } else {
           // Vraie transcription obtenue : on cherche une action réellement branchée.
           q = userText;
@@ -1870,28 +1546,9 @@ spark('sp1',24); spark('sp2',24); spark('sp3',24); spark('sp4',24);
   el.textContent = msg;
 })();
 
-/* ---- PAGE SECRÈTE : BUSTE DE SYNTHÈSE (déclenchée par la phrase vocale) ---- */
-window.openSecretPage = function(){
-  const page = document.getElementById('secretPage');
-  if (!page) return;
-  page.classList.add('open');
-  window.__secretOpen = true;
-  window.__secretJustOpened = performance.now();
-  // le canvas était masqué (display:none) au chargement, donc mesuré à taille 0 —
-  // on force un nouveau calcul de ses dimensions maintenant qu'il est visible.
-  if (window.__resizeHumanCanvas) requestAnimationFrame(window.__resizeHumanCanvas);
-};
-window.closeSecretPage = function(){
-  const page = document.getElementById('secretPage');
-  if (!page) return;
-  page.classList.remove('open');
-  window.__secretOpen = false;
-};
-
+/* ---- TÊTE DE SYNTHÈSE — affichée en permanence sur la page d'accueil ---- */
 (function(){
-  const closeBtn = document.getElementById('secretCloseBtn');
-
-  // --- Console de session (fenêtre script à droite de la tête) ---
+  // --- Console de session ---
   const scBody = document.getElementById('secretConsoleBody');
   const stateBadge = document.getElementById('secretState');
   window.__pushConsole = function(who, text){
@@ -1921,7 +1578,7 @@ window.closeSecretPage = function(){
 
   // Reflète l'état réel du micro sur les boutons de l'overlay
   setInterval(() => {
-    if (!window.__secretOpen || !window.__jarvisGetState) return;
+    if (!window.__jarvisGetState) return;
     const { state, alwaysListenMode } = window.__jarvisGetState();
     if (sTalk){
       const active = (state === 'listening');
@@ -1938,7 +1595,7 @@ window.closeSecretPage = function(){
 
   // Reflète l'état de Jarvis dans le badge (couleur + libellé)
   setInterval(() => {
-    if (!stateBadge || !window.__secretOpen) return;
+    if (!stateBadge) return;
     const st = window.__jarvisState || '';
     const listening = (window.__jarvisStatusText || '').indexOf('ÉCOUTE') >= 0
                    || (window.__jarvisStatusText || '').indexOf('VEILLE ACTIVE') >= 0;
@@ -1950,7 +1607,6 @@ window.closeSecretPage = function(){
     stateBadge.textContent = label;
   }, 200);
 
-  if (closeBtn) closeBtn.addEventListener('click', () => window.closeSecretPage());
 
   const canvas = document.getElementById('humanCanvas');
   if (!canvas) return;
@@ -2161,7 +1817,6 @@ window.closeSecretPage = function(){
   function render(ts){
     const dt = lastTs ? Math.min(0.05, (ts - lastTs) / 1000) : 0.016;
     lastTs = ts;
-    if (!window.__secretOpen){ return; }
     t += dt;
 
     const speaking = !!window.__jarvisSpeaking;
